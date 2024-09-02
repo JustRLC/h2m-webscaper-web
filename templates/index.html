@@ -1,0 +1,112 @@
+<!---  Made by JustRLC (Melony)
+https://github.com/JustRLC
+	-->
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>H2M Server List Scraper by JustRLC</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <style>
+            body {
+                background-color: #1E1E1E;
+                color: #C5C6C7;
+                font-family: 'Courier New', Courier, monospace;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+            }
+            .container {
+                background-color: #2C2F33;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+                width: 400px;
+                text-align: center;
+            }
+            h1 {
+                color: #66ff1a;
+            }
+            button {
+                background-color: #5ca145;
+                color: #1E1E1E;
+                border: none;
+                padding: 10px 20px;
+                font-size: 16px;
+                cursor: pointer;
+                border-radius: 5px;
+                margin-top: 20px;
+            }
+            button:hover {
+                background-color: #66ff1a;
+                color: #2C2F33;
+            }
+            .output, .status-output {
+                margin-top: 20px;
+            }
+            .social-icons {
+                margin-top: 20px;
+            }
+            .social-icons a {
+                color: #66ff1a;
+                font-size: 24px;
+                margin: 0 10px;
+                text-decoration: none;
+            }
+            .social-icons a:hover {
+                color: #5ca145;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>H2M Server List Scraper</h1>
+            <p>Click the button to scrape data and download as a JSON file.</p>
+            <button id="scrapeButton">Scrape</button>
+            <div class="output" id="output"></div>
+    
+            <div class="status-output" id="statusOutput">Checking status...</div>
+    
+            <div class="social-icons">
+                <a href="https://github.com/justrlc" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://twitter.com/reececoopr" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.reddit.com/r/H2MMW/" target="_blank"><i class="fab fa-reddit"></i></a>
+            </div>
+        </div>
+    
+        <script>
+            document.getElementById('scrapeButton').addEventListener('click', function() {
+                fetch('/scrape')
+                    .then(response => response.json())
+                    .then(data => {
+                        const output = document.getElementById('output');
+                        output.innerHTML = 'Scraping completed. <a href="' + data.file_url + '" download="scraped_data.json">Download JSON</a>';
+                    })
+                    .catch(error => {
+                        const output = document.getElementById('output');
+                        output.innerHTML = 'Error occurred: ' + error.message;
+                    });
+            });
+    
+            window.addEventListener('load', function() {
+                fetch('/check_status')
+                    .then(response => response.json())
+                    .then(data => {
+                        const statusOutput = document.getElementById('statusOutput');
+                        if (data.status === 'up') {
+                            statusOutput.innerHTML = 'master.iw4.zip is <span style="color: #66ff1a;">active</span>.';
+                        } else {
+                            statusOutput.innerHTML = 'master.iw4.zip is  <span style="color: #FF6347;">inactive</span>.';
+                        }
+                    })
+                    .catch(error => {
+                        const statusOutput = document.getElementById('statusOutput');
+                        statusOutput.innerHTML = 'Error occurred: ' + error.message;
+                    });
+            });
+        </script>
+    </body>
+    </html>
